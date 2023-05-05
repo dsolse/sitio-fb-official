@@ -1,11 +1,19 @@
+import { motion, useScroll } from "framer-motion"
 import { nanoid } from "nanoid"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 
 function Navbar({routes} : {routes : {route:string, id:string}[]}) {
-	
+	const { scrollY } = useScroll()
+	const [show, setShow] = useState(true)
+	scrollY.on("change", () => {
+		setShow((scrollY.getPrevious() > scrollY.get()))
+	})
 	return (
-		<nav className="fixed w-full top-0 flex flex-row justify-between items-center px-12 py-6 shadow-slate-100 shadow-2xl ">
+		<motion.nav
+		animate={{opacity: show ? 1 : 0}}
+		className="fixed w-full bg-white z-50 top-0 flex flex-row justify-between items-center px-12 py-6 shadow-slate-50 shadow-xl ">
 			<div>
 				<Image
 					src="/logo.png"
@@ -34,7 +42,7 @@ function Navbar({routes} : {routes : {route:string, id:string}[]}) {
 			<div className="md:hidden flex">
 				Open
 			</div>
-		</nav>
+		</motion.nav>
 	)
 }
 
